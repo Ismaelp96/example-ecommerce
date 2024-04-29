@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import Stripe from "stripe";
 
 import db from "@/db/db";
+import PurchaseReceiptEmail from "@/react-email-starter/PurchaseReceipt";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -51,7 +52,13 @@ export async function POST(req: NextRequest) {
       from: `Support <${process.env.SENDER_EMAIL}>`,
       to: email,
       subject: "Order Confirmation",
-      react: <h1>Hi</h1>,
+      react: (
+        <PurchaseReceiptEmail
+          order={order}
+          product={product}
+          downloadVerificationId={downloadVerification.id}
+        />
+      ),
     });
 
     return new NextResponse();
